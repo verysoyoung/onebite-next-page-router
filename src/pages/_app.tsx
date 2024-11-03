@@ -1,35 +1,18 @@
+import GlobalLayout from '@/components/global-layout'
 import '@/styles/globals.css'
+import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { ReactNode } from 'react'
 
-export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter()
-  const onClickButton = () => {
-    router.push('/test')
-  }
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactNode) => ReactNode
+}
 
-  //mount 될 때만 한 번 실행
-  useEffect(() => {
-    router.prefetch('/test')
-  }, [])
+export default function App({
+  Component,
+  pageProps,
+}: AppProps & { Component: NextPageWithLayout }) {
+  const getLayout = Component.getLayout ?? ((page: ReactNode) => page)
 
-  return (
-    <>
-      <header>
-        <Link href="/"> index </Link>
-        &nbsp;
-        <Link href="/search" prefetch={false}>
-          search
-        </Link>
-        &nbsp;
-        <Link href="/book/1"> book/1 </Link>
-        <div>
-          <button onClick={onClickButton}>페이지 이동</button>
-        </div>
-      </header>
-      <Component {...pageProps} />
-    </>
-  )
+  return <GlobalLayout>{getLayout(<Component {...pageProps} />)}</GlobalLayout>
 }
