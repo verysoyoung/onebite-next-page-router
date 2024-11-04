@@ -3,8 +3,25 @@ import style from './index.module.css'
 import { ReactNode } from 'react'
 import books from '@/mock/books.json'
 import BookItem from '@/components/book-item'
+import { InferGetServerSidePropsType } from 'next'
 
-export default function Home() {
+export const getServerSideProps = () => {
+  // 컴포넌트보다 먼저 실행, 컴포넌트에 필요한 데이터 불러오는 함수
+  const data = 'hello'
+
+  return {
+    //단 하나의 객체를 리턴 props 프로퍼티값을 넣어야함
+    props: {
+      data,
+    },
+  }
+}
+
+export default function Home({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(data)
+
   return (
     <div className={style.container}>
       <section>
