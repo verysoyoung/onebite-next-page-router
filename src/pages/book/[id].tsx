@@ -1,4 +1,6 @@
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import style from './[id].module.css'
+import fetchOneBook from '@/lib/fetch-one-book'
 
 const mockData = {
   id: 1,
@@ -12,11 +14,24 @@ const mockData = {
     'https://shopping-phinf.pstatic.net/main_3888828/38888282618.20230913071643.jpg',
 }
 
-export default function BookPage() {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const id = context.params!.id
+  const data = await fetchOneBook(Number(id))
+  return {
+    props: { data },
+  }
+}
+
+export default function BookPage({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // const router = useRouter()
   // const { id } = router.query
+  console.log(data)
   const { id, title, subTitle, description, author, publisher, coverImgUrl } =
-    mockData
+    data
   return (
     <div className={style.container}>
       <div
