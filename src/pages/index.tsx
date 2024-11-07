@@ -2,13 +2,14 @@ import SearchableLayout from '@/components/searchable-layout'
 import style from './index.module.css'
 import { ReactNode } from 'react'
 import BookItem from '@/components/book-item'
-import { InferGetServerSidePropsType } from 'next'
+import { InferGetStaticPropsType } from 'next'
 import fetchBooks from '@/lib/fetch-books'
 import fetchRandomBooks from '@/lib/fetch-random-books'
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   // 컴포넌트보다 먼저 실행, 컴포넌트에 필요한 데이터 불러오는 함수
   // Promise.all() 동시에 병렬로 불러옴
+  console.log('index page')
   const [allBooks, recoBooks] = await Promise.all([
     fetchBooks(),
     fetchRandomBooks(),
@@ -26,8 +27,7 @@ export const getServerSideProps = async () => {
 export default function Home({
   allBooks,
   recoBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log('recoBooks', recoBooks)
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className={style.container}>
       <section>
