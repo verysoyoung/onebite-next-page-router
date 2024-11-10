@@ -1,5 +1,5 @@
 export default async function fetchOneBook(id: number) {
-  const url = `http://localhost:12345/book/${id}`
+  const url = `https://onebite-books-server-main-amber-nine.vercel.app/book/${id}`
   const response = await fetch(url)
   try {
     if (!response.ok) new Error()
